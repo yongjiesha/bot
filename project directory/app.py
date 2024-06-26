@@ -2,8 +2,8 @@ import os
 from flask import Flask, request, jsonify, render_template
 import openai
 
-app = Flask(__name__)  # Make sure this is a valid Flask app instance.
-openai.api_key = os.getenv("OPENAI_API_KEY")  # Replace with your environment variable name.
+app = Flask(__name__)
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route('/')
 def index():
@@ -15,14 +15,15 @@ def ask():
     prompt = data['prompt']
     try:
         response = openai.Completion.create(
-            engine="gpt-4o",  # Check the engine - 'gpt-4o' seems incorrect.
+            engine="gpt-4",  # Corrected engine name
             prompt=prompt,
             max_tokens=150,
             n=1,
             stop=None,
             temperature=0.7
         )
-        return jsonify(response)
+        answer = response.choices[0].text.strip()  # Extracting the response text
+        return jsonify({"response": answer})
     except openai.error.OpenAIError as e:
         return jsonify({"error": str(e)}), 500
 
