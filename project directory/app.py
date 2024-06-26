@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, render_template
 import openai
 
 app = Flask(__name__)  # Make sure this is a valid Flask app instance.
-openai.api_key = os.getenv("OPENAI_API-KEY")  # Replace with your environment variable name.
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Replace with your environment variable name.
 
 @app.route('/')
 def index():
