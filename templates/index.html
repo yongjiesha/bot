@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Language Model Interface</title>
+</head>
+<body>
+    <h1>Language Model Chat</h1>
+    <textarea id="prompt" rows="4" cols="50" placeholder="Enter your prompt..."></textarea><br>
+    <button onclick="submitPrompt()">Submit</button>
+    <pre id="response"></pre>
+
+    <script>
+        async function submitPrompt() {
+            const prompt = document.getElementById('prompt').value;
+            const responseContainer = document.getElementById('response');
+            
+            const data = { prompt: prompt };
+            
+            try {
+                const response = await fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const responseData = await response.json();
+
+                if (responseData.error) {
+                    responseContainer.textContent = 'Error: ' + responseData.error;
+                } else {
+                    responseContainer.textContent = responseData.response;
+                }
+            } catch (error) {
+                responseContainer.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
